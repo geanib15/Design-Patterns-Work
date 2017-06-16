@@ -6,6 +6,7 @@
 package simple;
 
 import common.DependencyException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,24 +16,40 @@ import java.util.Map;
  */
 public class Container implements Injector {
 
-    Map<String,Object> map = new HashMap<String,Object>();
+    Map<String,Object> constants = new HashMap<String,Object>();
+    Map<String,Factory> factories = new HashMap<String,Factory>();
+    Map<String,String[]> factoryDependences = new HashMap<String,String[]>();
     
     @Override
     public void registerConstant(String name, Object value) throws DependencyException {
-        if (map.containsKey(name)) throw new DependencyException("Already existing constant");
-        map.put(name, value);
+        if (constants.containsKey(name)) throw new DependencyException("Already existing constant");
+        constants.put(name, value);
     }
     
     @Override
-    public void registerFactory(String name, Factory creator, String... parameters) throws DependencyException {
-       if (map.containsKey(name)) throw new DependencyException("Already existing machine");
-       
+    public void registerFactory(String name, Factory creator, String[] parameters) throws DependencyException {
+       if (constants.containsKey(name) || factories.containsKey(name)) throw new DependencyException("Already existing machine");
+       factories.put(name, creator);
+       factoryDependences.put(name, parameters);
         
     }
 
     @Override
     public Object getObject(String name) throws DependencyException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (constants.containsKey(name)){
+            return constants.get(name);
+        }        
+        else if (factories.containsKey(name)){
+            Factory factory = factories.get(name);
+            Object[] obj = new Object[factoryDependences.get(name).length];
+            for (int i = 0; i < obj.length; ++i){
+                obj[i] = this.getObject(factoryDependences.get(name)[i]);
+            }            
+           return factory.create(obj);            
+        }
+        else{
+            throw new DependencyException("Already existing object");            
+        }    
     }
     
     
