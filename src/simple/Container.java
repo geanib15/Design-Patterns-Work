@@ -6,7 +6,6 @@
 package simple;
 
 import common.DependencyException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,7 +47,7 @@ public class Container implements Injector {
            return factory.create(obj);            
         }
         else{
-            throw new DependencyException("Already existing object");            
+            throw new DependencyException("There is no object");            
         }    
     }
     
