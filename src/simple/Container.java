@@ -15,9 +15,9 @@ import java.util.Map;
  */
 public class Container implements Injector {
 
-    Map<String,Object> constants = new HashMap<String,Object>();
-    Map<String,Factory> factories = new HashMap<String,Factory>();
-    Map<String,String[]> factoryDependences = new HashMap<String,String[]>();
+    Map<String,Object> constants = new HashMap<>();
+    Map<String,Factory> factories = new HashMap<>();
+    Map<String,String[]> factoryDependences = new HashMap<>();
     
     @Override
     public void registerConstant(String name, Object value) throws DependencyException {
@@ -27,7 +27,7 @@ public class Container implements Injector {
     
     @Override
     public void registerFactory(String name, Factory creator, String[] parameters) throws DependencyException {
-       if (constants.containsKey(name) || factories.containsKey(name)) throw new DependencyException("Already existing machine");
+       if (factoryDependences.containsKey(name) || factories.containsKey(name)) throw new DependencyException("Already existing machine");
        factories.put(name, creator);
        factoryDependences.put(name, parameters);
         

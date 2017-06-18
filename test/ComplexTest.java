@@ -32,39 +32,27 @@ public class ComplexTest {
     }
     
     @Test
-    public void testD() throws DependencyException{   
-
-        System.out.println("INICI TEST 1");
-        System.out.println("");
+    public void testD() throws DependencyException{
         injector.registerConstant(Integer.class, 42);
         injector.registerFactory(InterfaceD.class, new FactoryD1(), Integer.class);
         InterfaceD d = injector.getObject(InterfaceD.class);
         assertThat(d, is(instanceOf(ImplementationD1.class)));
         ImplementationD1 d1 = (ImplementationD1) d;
         assertThat(d1.i, is(42));
-        System.out.println("");
-        System.out.println("TEST 1 FINALITZAT CORRECTAMENT");
     }
     
     @Test
     public void testC() throws DependencyException{ 
-
-        System.out.println("INICI TEST 2");
-        System.out.println("");
         injector.registerConstant(String.class, "Testing");
         injector.registerFactory(InterfaceC.class, new FactoryC1(), String.class);
         InterfaceC c = injector.getObject(InterfaceC.class);
         assertThat(c, is(instanceOf(ImplementationC1.class)));
         ImplementationC1 c1 = (ImplementationC1) c;
         assertThat(c1.s, is("Testing"));
-        System.out.println("");
-        System.out.println("TEST 2 FINALITZAT CORRECTAMENT");
     }
     
     @Test
     public void testB() throws DependencyException{
-        System.out.println("INICI TEST 3");
-        System.out.println("");
         injector.registerConstant(Integer.class, 42);
         injector.registerFactory(InterfaceD.class, new FactoryD1(), Integer.class);
         injector.registerFactory(InterfaceB.class, new FactoryB1(), InterfaceD.class);
@@ -72,14 +60,10 @@ public class ComplexTest {
         assertThat(b, is(instanceOf(ImplementationB1.class)));
         ImplementationB1 b1 = (ImplementationB1) b;
         assertThat(b1.d, is(instanceOf(ImplementationD1.class)));
-        System.out.println("");
-        System.out.println("TEST 2 FINALITZAT CORRECTAMENT");        
     }
     
     @Test
     public void testA() throws DependencyException{
-        System.out.println("INICI TEST 4");
-        System.out.println("");
         injector.registerConstant(Integer.class, 42);
         injector.registerConstant(String.class, "Testing");
         injector.registerFactory(InterfaceD.class, new FactoryD1(), Integer.class);
@@ -91,8 +75,6 @@ public class ComplexTest {
         ImplementationA1 a1 = (ImplementationA1) a;
         assertThat(a1.b, is(instanceOf(ImplementationB1.class)));
         assertThat(a1.c, is(instanceOf(ImplementationC1.class)));
-        System.out.println("");
-        System.out.println("TEST 2 FINALITZAT CORRECTAMENT"); 
     }
     
      @Test(expected = DependencyException.class)
@@ -113,7 +95,7 @@ public class ComplexTest {
      @Test(expected = DependencyException.class)
     public void getObjectthatDoesntExistis() throws DependencyException{
         Container c = new Container();
-        
+        c.getObject(ImplementationC1.class);
     }
     
 }
